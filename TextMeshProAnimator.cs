@@ -31,14 +31,14 @@ public class TextMeshProAnimator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 		StartCoroutine(WaitJitter());
 	}
 
 
 	IEnumerator WaitJitter()
 	{
-		
+
 
 		Vector3[] vertices_Origin = m_TextMeshPro.mesh.vertices;
 		#if !UNITY_EDITOR
@@ -50,7 +50,6 @@ public class TextMeshProAnimator : MonoBehaviour {
 
 		while(true)
 		{
-
 			#if UNITY_EDITOR
 			m_TextMeshPro.ForceMeshUpdate();
 
@@ -70,26 +69,23 @@ public class TextMeshProAnimator : MonoBehaviour {
 
 				if(!charInfo.isVisible)
 					continue;
-				
-				int vertexIndex = charInfo.vertexIndex;
 
+				int vertexIndex = charInfo.vertexIndex;
 
 				if(m_Curve.length > 0)
 				{
 					Vector3 offset = Vector3.zero;
 
 					offset.y = m_Curve.Evaluate(curveT + curveTimeStart + ( curveTimeDuration * ( i + 1 ) ) / characterCount );
-
+					print(offset.y);
 					vertices[vertexIndex + 0] = vertices_Origin[vertexIndex + 0] + offset;
 					vertices[vertexIndex + 1] = vertices_Origin[vertexIndex + 1] + offset;
 					vertices[vertexIndex + 2] = vertices_Origin[vertexIndex + 2] + offset;
 					vertices[vertexIndex + 3] = vertices_Origin[vertexIndex + 3] + offset;
 				}
 
-
 				Color32 charColor = m_Gradient.Evaluate(Mathf.Repeat(  curveT + ((float) i / characterCount) , 1));
 
-			
 				colors[vertexIndex + 0] = charColor;
 				colors[vertexIndex + 1] = charColor;
 				colors[vertexIndex + 2] = charColor;
@@ -100,8 +96,6 @@ public class TextMeshProAnimator : MonoBehaviour {
 
 			m_TextMeshPro.mesh.colors32 = colors;
 			m_TextMeshPro.mesh.vertices = vertices;
-			m_TextMeshPro.ForceMeshUpdate();
-
 
 			yield return new WaitForSeconds(interval);
 
@@ -114,6 +108,6 @@ public class TextMeshProAnimator : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 }
